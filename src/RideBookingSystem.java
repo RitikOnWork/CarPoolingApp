@@ -4,52 +4,15 @@ import java.util.List;
 public class RideBookingSystem {
 
     private List<User> users = new ArrayList<>();
-    public List<Ride> rideList = new ArrayList<>();
+    private List<Ride> rideList = new ArrayList<>();
+    private List<Booking> bookings = new ArrayList<>();
+
+    private int bookingCounter = 1;
 
     // SIGNUP
     public void signup(User user) {
-        if (user == null) {
-            System.out.println("Invalid user details");
-            return;
-        }
         users.add(user);
-        System.out.println("Signup successful for: " + user.getEmail());
-    }
-
-    // LOGIN
-    public User login(String email, String password) {
-        if (email == null || email.trim().isEmpty() || password == null) {
-            System.out.println("Your email or password is incorrect");
-            return null;
-        }
-
-        for (User user : users) {
-            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
-                System.out.println("Login successful");
-                return user;
-            }
-        }
-
-        System.out.println("Invalid credentials");
-        return null;
-    }
-
-    // UPDATE USER DETAILS
-    public void updateUserDetails(int userId, String newName) {
-        for (User user : users) {
-            if (user.getId() == userId) {
-                user.setName(newName);
-                System.out.println("User details updated");
-                return;
-            }
-        }
-        System.out.println("User not found");
-    }
-
-    // DELETE ACCOUNT
-    public void deleteAccount(int userId) {
-        users.removeIf(user -> user.getId() == userId);
-        System.out.println("Account deleted successfully");
+        System.out.println("Signup successful: " + user.getName());
     }
 
     // CREATE RIDE
@@ -62,57 +25,59 @@ public class RideBookingSystem {
     }
 
     // SHOW ALL RIDES
-    public List<Ride> showAllRide() {
-        return rideList;
+    public void showAllRides() {
+        for (Ride ride : rideList) {
+            System.out.println(ride);
+        }
     }
 
     // SEARCH RIDE
     public List<Ride> searchRide(String source, String destination, int seats) {
-        List<Ride> availableRide = new ArrayList<>();
+        List<Ride> result = new ArrayList<>();
 
         for (Ride ride : rideList) {
-            if (ride.getSource().equals(source)
-                    && ride.getDestination().equals(destination)
+            if (ride.getSource().equalsIgnoreCase(source)
+                    && ride.getDestination().equalsIgnoreCase(destination)
                     && ride.getSeats() >= seats) {
-
-                availableRide.add(ride);
+                result.add(ride);
             }
         }
-        return availableRide;
-    }
-
-    // UPDATE RIDE
-    public void updateRide(int rideId, int newSeats, double newFare) {
-        for (Ride ride : rideList) {
-            if (ride.getId() == rideId) {
-                ride.setSeats(newSeats);
-                ride.setFare(newFare);
-                System.out.println("Ride updated successfully");
-                return;
-            }
-        }
-        System.out.println("Ride not found");
-    }
-
-    // DELETE RIDE
-    public void deleteRide(int rideId) {
-        rideList.removeIf(ride -> ride.getId() == rideId);
-        System.out.println("Ride deleted successfully");
+        return result;
     }
 
     // BOOK RIDE
-    public void bookRide(int id, User user, int seatsBooked) {
+    public void bookRide(int rideId, User user, int seatsBooked) {
+
         for (Ride ride : rideList) {
-            if (ride.getId() == id) {
-                if (ride.getSeats() >= seatsBooked) {
-                    ride.setSeats(ride.getSeats() - seatsBooked);
-                    System.out.println("Ride booked successfully by " + user.getName());
-                } else {
-                    System.out.println("Not enough seats available");
+            if (ride.getId() == rideId) {
+
+                if (ride.getSeats() < seatsBooked) {
+                    System.out.println("❌ Not enough seats available");
+                    return;
                 }
+
+                ride.setSeats(ride.getSeats() - seatsBooked);
+
+                Booking booking = new Booking(
+                        bookingCounter++,
+                        ride,
+                        user,
+                        seatsBooked
+                );
+
+                bookings.add(booking);
+                System.out.println("Booking Successful");
+                System.out.println(booking);
                 return;
             }
         }
         System.out.println("Ride not found");
+    }
+
+    // SHOW ALL BOOKINGS
+    public void showAllBookings() {
+        for (Booking booking : bookings) {
+            System.out.println(booking);
+        }
     }
 }
