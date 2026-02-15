@@ -1,40 +1,30 @@
+import java.time.LocalDateTime;
+
 public class Ride {
 
-    private int id;
     private String source;
     private String destination;
     private int seats;
     private double fare;
-    private User driver;
+    private int driverId;
+    private LocalDateTime departureTime;
 
-    public Ride(int id, String source, String destination,
-                int seats, double fare, User driver) {
+    public Ride(String source, String destination,
+                int seats, double fare,
+                int driverId, LocalDateTime departureTime) {
 
-        this.id = id;
         this.source = source;
         this.destination = destination;
         this.seats = seats;
         this.fare = fare;
-        this.driver = driver;
+        this.driverId = driverId;
+        this.departureTime = departureTime;
     }
 
-    public int getId() { return id; }
     public String getSource() { return source; }
     public String getDestination() { return destination; }
     public int getSeats() { return seats; }
     public double getFare() { return fare; }
-
-    public void setSeats(int seats) {
-        this.seats = seats;
-    }
-
-    @Override
-    public String toString() {
-        return "Ride{id=" + id +
-                ", " + source + " -> " + destination +
-                ", seats=" + seats +
-                ", fare=" + fare +
-                ", driver=" + driver.getName() +
-                "}";
-    }
+    public int getDriverId() { return driverId; }
+    public LocalDateTime getDepartureTime() { return departureTime; }
 }

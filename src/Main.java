@@ -1,4 +1,4 @@
-import java.sql.Connection;
+import java.time.LocalDateTime;
 
 public class Main {
 
@@ -6,36 +6,34 @@ public class Main {
 
         RideBookingSystem system = new RideBookingSystem();
 
-        // Signup users
-        User user1 = new User(1, "Ritik", "ritik@gmail.com", "1234");
-        User user2 = new User(2, "Aman", "aman@gmail.com", "abcd");
+        // Create users
+        system.signup(new User("Ritik", "ritik@gmail.com", "1234", "DRIVER"));
+        system.signup(new User("Aman", "aman@gmail.com", "abcd", "PASSENGER"));
 
-        system.signup(user1);
-        system.signup(user2);
+        // Add vehicle for driver (assuming driver id = 1)
+        system.addVehicle(1,
+                new Vehicle("RJ14AB1234", "Hyundai i20", "White", 5));
 
-        // Create rides
-        system.createRide(1, "Jaipur", "Delhi", 5, 725.00, user1);
-        system.createRide(2, "Greater Noida", "Agra", 3, 340.00, user1);
-        system.createRide(3, "Gurugram", "Faridabad", 2, 180.00, user2);
-        system.createRide(4, "Gurugram", "Delhi", 2, 80.00, user2);
+        // Verify driver
+        system.verifyDriver(1, "DL-99887766");
 
-        System.out.println("\nAll Rides:");
-        system.showAllRides();
+        // Create ride
+        system.createRide(
+                new Ride("Jaipur", "Delhi", 4, 700,
+                        1, LocalDateTime.now().plusHours(5)));
 
-        System.out.println("\nBooking Ride...");
-        system.bookRide(4, user1, 1);
+        // Book ride
+        system.bookRide(1, 2, 2);
 
-        System.out.println("\nAll Bookings:");
-        system.showAllBookings();
+        // Rate driver
+        system.rateDriver(1, 5);
 
-        Connection conn =   DBConnection.getConnection();
+        System.out.println("\nSearching Ride:");
+        system.searchRide("Jaipur", "Delhi", 1);
 
-        if (conn != null) {
-            System.out.println("PostgreSQL connected successfully from Java!");
-        } else {
-            System.out.println("Database connection failed!");
-        }
+        // Cancel booking with ID = 1
+        system.cancelBooking(1);
+
 
     }
 }
-
