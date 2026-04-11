@@ -61,3 +61,5 @@ Since the system uses secure **BCrypt encryption**, we recommend creating a new 
 
 ---
 *Created with ❤️ by Ritik Raj.*
+
+🔗 **Connect with me:** [LinkedIn](https://www.linkedin.com/in/ritikonwork)
